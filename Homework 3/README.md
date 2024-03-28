@@ -13,3 +13,7 @@ There are 3 dataset used in this homework:
 - Columns used: District, lat, long
 3. [E-Report Energey](https://e-report.energy.go.th/area/Bangkok.htm): Area of each District
 - Columns used: District, Area (sq. km)
+
+## Visualization
+1. ** Understanding Population in each District
+
