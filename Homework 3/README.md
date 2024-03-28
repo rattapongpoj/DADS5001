@@ -16,6 +16,7 @@ There are 3 dataset used in this homework:
 
 ## Visualization
 1. **Understanding Population in each District**
+1.1 Number of Population in Bangkok by District
 ![district_population](https://github.com/prattapong/DADS5001/assets/124485030/9ee7b812-36ad-4714-b824-ce12a6c0cf69)
 
 
