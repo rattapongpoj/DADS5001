@@ -5,8 +5,7 @@ This repository contains the materials and resources needed to complete homework
 ## Data Source
 
 To get started with your homework project, follow these steps:
-1. [Population Data: Official statistics registration systems](https://stat.bora.dopa.go.th/stat/statnew/statMONTH/statmonth/#/displayData)
-  1.1 test
+1. [Official statistics registration systems](https://stat.bora.dopa.go.th/stat/statnew/statMONTH/statmonth/#/displayData): Population in Bangkok as of January 2024 
 1. **Clone the Repository**: Clone this repository to your local machine using the following command:
 
 2. **Install Dependencies**: If you haven't already installed Plotly, you can do so using pip:
