@@ -15,5 +15,5 @@ There are 3 dataset used in this homework:
 - Columns used: District, Area (sq. km)
 
 ## Visualization
-1. ** Understanding Population in each District **
+1. **Understanding Population in each District**
 
