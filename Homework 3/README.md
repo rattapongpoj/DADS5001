@@ -16,4 +16,5 @@ There are 3 dataset used in this homework:
 
 ## Visualization
 1. **Understanding Population in each District**
+![Uploading image.png…]()
 
