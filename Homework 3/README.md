@@ -20,5 +20,8 @@ There are 3 dataset used in this homework:
 - Title: Number of Population in Bangkok by District
 - Chart Type: Scatter Mapbox
 - Reason for Chart Selection: Scatter Mapbox provides immediate context to your data by showing the geographic distribution of population data across different districts in Bangkok. Users can easily identify clusters, trends, or outliers based on the spatial arrangement of data points.
-
+- Description: In the scatter map visualization above, it is obvious that population density in central districts is notably lower compared to their surrounding districts. However, some districts, such as Bangbon and Taweewattana, exhibit a relatively small number of population.
+![top_5](https://github.com/prattapong/DADS5001/assets/124485030/f7766c8d-b266-430b-a0a0-0e13d01e5ff5)
+- Title: Top 5 Districts by Population
+- Chart Type: Horizontal Bar Chart
 
