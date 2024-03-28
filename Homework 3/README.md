@@ -17,7 +17,8 @@ There are 3 dataset used in this homework:
 ## Visualization
 1. **Understanding Population in each District**
 ![district_population](https://github.com/prattapong/DADS5001/assets/124485030/9ee7b812-36ad-4714-b824-ce12a6c0cf69)
-- <u>Title</u>: Number of Population in Bangkok by District
-- <u>Chart Type</u>: Scatter Mapbox
+- Title: Number of Population in Bangkok by District
+- Chart Type: Scatter Mapbox
+- Reason for Chart Selection: Scatter Mapbox provides immediate context to your data by showing the geographic distribution of population data across different districts in Bangkok. Users can easily identify clusters, trends, or outliers based on the spatial arrangement of data points.
 
 
