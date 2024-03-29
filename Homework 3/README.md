@@ -12,7 +12,7 @@ There are 3 dataset used in this homework:
 - <ins>Data Gathering Method</ins>: Download [CSV](https://github.com/prattapong/DADS5001/blob/main/Homework%203/data/bangkok_population.csv) from website
 2. [Open Government Data of Thailand](https://data.go.th/dataset/item_c6d42e1b-3219-47e1-b6b7-dfe914f27910): Latitude and Longitude of each Sub-District
 - <ins>Columns used</ins>: District, lat, long
-- <ins>Data Gathering Method</ins>: Download [CSV]([https://github.com/prattapong/DADS5001/blob/main/Homework%203/data/bangkok_population.csv](https://github.com/prattapong/DADS5001/blob/main/Homework%203/data/tambon.csv)) from website
+- <ins>Data Gathering Method</ins>: Download [CSV](https://github.com/prattapong/DADS5001/blob/main/Homework%203/data/tambon.csv) from website
 3. [E-Report Energey](https://e-report.energy.go.th/area/Bangkok.htm): Area of each District
 - <ins>Columns used</ins>: District, Area (sq. km)
 - <ins>Data Gathering Method</ins>: Web Scraping with [BeautifulSoup](https://github.com/prattapong/DADS5001/blob/main/Homework%203/code/homework_3.ipynb)
