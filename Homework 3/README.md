@@ -24,4 +24,10 @@ There are 3 dataset used in this homework:
 ![top_5](https://github.com/prattapong/DADS5001/assets/124485030/f7766c8d-b266-430b-a0a0-0e13d01e5ff5)
 - Title: Top 5 Districts by Population
 - Chart Type: Horizontal Bar Chart
-
+- Reason for Chart Selection: Horizontal bar charts make it easy to compare the population sizes of different districts. The horizontal orientation of the bars naturally arranges the districts in a ranked order from top to bottom which make the ranking clear.
+- Description: Top 5 districts have more than 180,000 people in each district. Khlongsamwa is the district which has the most people leaving
+![lowest_5](https://github.com/prattapong/DADS5001/assets/124485030/3ba3a5fa-0863-4762-aed6-0fa750ad7f4d)
+- Title: Lowest 5 Districts by Population
+- Chart Type: Horizontal Bar Chart
+- Reason for Chart Selection: Like with the top 5 districts, using a horizontal bar chart allows for easy comparison of the population sizes of the lowest 5 districts. Viewers can quickly see the relative magnitudes of population for each district. When comparing the lowest 5 districts with the top 5, using horizontal bar charts allows for easy visual contrast. The orientation of the bars and the scaling of axis make it immediately clear which districts have the smallest populations compared to the largest populations.
+- Description: Lowest 5 districts have people living less than 45,000 people. Sampanthawong has the least people living with a number of 19,451 which is more than 10 times less than the most people living district (Khlongsamwa) 
