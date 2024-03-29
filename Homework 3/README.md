@@ -8,12 +8,14 @@ In this assignment, we'll be dealing with the population data of Bangkok, Thaila
 
 There are 3 dataset used in this homework:
 1. [Official statistics registration systems](https://stat.bora.dopa.go.th/stat/statnew/statMONTH/statmonth/#/displayData): Population in Bangkok as of January 2024 
-- Columns used: AMPHOE_E, LAT, LONG
-- Data Gathering Method: Download [CSV](https://github.com/prattapong/DADS5001/blob/main/Homework%203/data/bangkok_population.csv) from website
+- <ins>Columns used</ins>: AMPHOE_E, LAT, LONG
+- <ins>Data Gathering Method</ins>: Download [CSV](https://github.com/prattapong/DADS5001/blob/main/Homework%203/data/bangkok_population.csv) from website
 2. [Open Government Data of Thailand](https://data.go.th/dataset/item_c6d42e1b-3219-47e1-b6b7-dfe914f27910): Latitude and Longitude of each Sub-District
-- Columns used: District, lat, long
+- <ins>Columns used</ins>: District, lat, long
+- <ins>Data Gathering Method</ins>: Download [CSV]([https://github.com/prattapong/DADS5001/blob/main/Homework%203/data/bangkok_population.csv](https://github.com/prattapong/DADS5001/blob/main/Homework%203/data/tambon.csv)) from website
 3. [E-Report Energey](https://e-report.energy.go.th/area/Bangkok.htm): Area of each District
-- Columns used: District, Area (sq. km)
+- <ins>Columns used</ins>: District, Area (sq. km)
+- <ins>Data Gathering Method</ins>: Web Scraping with [BeautifulSoup](https://github.com/prattapong/DADS5001/blob/main/Homework%203/code/homework_3.ipynb)
 
 ## Visualization
 **1. Understanding Population in each District**
