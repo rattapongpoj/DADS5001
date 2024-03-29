@@ -15,7 +15,7 @@ There are 3 dataset used in this homework:
 - Columns used: District, Area (sq. km)
 
 ## Visualization
-1. **Understanding Population in each District**
+**1. Understanding Population in each District**
 ![district_population](https://github.com/prattapong/DADS5001/assets/124485030/9ee7b812-36ad-4714-b824-ce12a6c0cf69)
 - Title: Number of Population in Bangkok by District
 - Chart Type: Scatter Mapbox
@@ -30,4 +30,17 @@ There are 3 dataset used in this homework:
 - Title: Lowest 5 Districts by Population
 - Chart Type: Horizontal Bar Chart
 - Reason for Chart Selection: Like with the top 5 districts, using a horizontal bar chart allows for easy comparison of the population sizes of the lowest 5 districts. Viewers can quickly see the relative magnitudes of population for each district. When comparing the lowest 5 districts with the top 5, using horizontal bar charts allows for easy visual contrast. The orientation of the bars and the scaling of axis make it immediately clear which districts have the smallest populations compared to the largest populations.
-- Description: Lowest 5 districts have people living less than 45,000 people. Sampanthawong has the least people living with a number of 19,451 which is more than 10 times less than the most people living district (Khlongsamwa) 
+- Description: Lowest 5 districts have people living less than 45,000 people. Sampanthawong has the least people living with a number of 19,451 which is more than 10 times less than the most people living district (Khlongsamwa).
+
+**2. Male proportion in each district**
+![male_ratio](https://github.com/prattapong/DADS5001/assets/124485030/1b3f4482-e7a1-4f3f-860d-2ae0a0026008)
+- Title: Male Ratio in each District
+- Chart Type: Scatter Mapbox
+- Reason for Chart Selection: Scatter Mapbox provides immediate context to data by showing the geographic distribution of male ratio across different districts in Bangkok. Viewers can easily identify patterns or clusters of high or low male ratios in specific areas of the city.
+- Description: There is only one district which is Dusit that has more men than women
+
+**3. Understanding the density of population per area of each district**
+![population_density](https://github.com/prattapong/DADS5001/assets/124485030/c7ecd248-210d-4271-9fcb-5f165c3d1cad)
+- Title: Male Ratio in each District
+- Chart Type: Scatter Mapbox
+- - Reason for Chart Selection
