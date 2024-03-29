@@ -43,4 +43,5 @@ There are 3 dataset used in this homework:
 ![population_density](https://github.com/prattapong/DADS5001/assets/124485030/c7ecd248-210d-4271-9fcb-5f165c3d1cad)
 - Title: Male Ratio in each District
 - Chart Type: Scatter Mapbox
- - Reason for Chart Selection
+- Reason for Chart Selection: In Scatter Mapbox, using color to represent population density allows for quick and intuitive interpretation of the data. High-density areas are represented with red, while low-density areas are represented with blue. This color setting allows viewers to identify areas of high and low population density at a glance. Not only population density, but size of scatter also allows viewers to sea the sizing of each district to understand how crowded of each area.
+- Description: Pom Prap Sattruphai and Samphanthawong rank among the five districts with the lowest population counts. With their small geographical areas, only around 1 to 2 square kilometers each, these districts are characterized by high population density, making them among the most densely populated areas in the region.
