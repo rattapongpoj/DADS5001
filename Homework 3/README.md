@@ -43,4 +43,4 @@ There are 3 dataset used in this homework:
 ![population_density](https://github.com/prattapong/DADS5001/assets/124485030/c7ecd248-210d-4271-9fcb-5f165c3d1cad)
 - Title: Male Ratio in each District
 - Chart Type: Scatter Mapbox
-- - Reason for Chart Selection
+ - Reason for Chart Selection
