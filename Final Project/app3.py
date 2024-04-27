@@ -189,7 +189,7 @@ sidebar = html.Div(
         dbc.Row(
             [
                 html.H5(
-                    'BALL is AI', 
+                    'DADS5001', 
                     style = {'margin-top': 'auto',
                              'margin-bottom': 'auto',
                              'margin-left': 'auto',
@@ -199,6 +199,38 @@ sidebar = html.Div(
                 )
             ],
             style = {"height": "10vh"}
+        ),
+
+        dbc.Row(
+            [
+                dbc.Col(
+                    html.Div(
+                        [
+                            dcc.Upload(
+                                id = 'upload-data',
+                                children=html.Div(
+                                    [
+                                        'Drag and Drop or ',
+                                        html.A('Select Files')
+                                    ],
+                                    style = {'width': '100%'}
+                                ),
+                                style = {'width': '100%',
+                                         'height': '60px',
+                                         'lineHeight': '60px',
+                                         'borderWidth': '1px',
+                                         'borderStyle': 'dashed',
+                                         'borderRadius': '5px',
+                                         'textAlign': 'center',
+                                         'margin': '10px'
+                                },
+                                multiple = False
+                            ),
+                            html.Div(id = 'output-data-upload')
+                        ]
+                    )
+                )
+            ]
         ),
 
         # Filter 1
