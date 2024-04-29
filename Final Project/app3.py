@@ -7,8 +7,11 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 import plotly.graph_objs as go
 import plotly.express as px
+import base64
+import io
 
 ################################################################################################################
 ################################################## PARAMETERS ##################################################
@@ -89,6 +92,21 @@ def suggest_chart_type(df:pd.DataFrame, generated_text:str):
         return 'line'
     else:
         return 'bar'
+    
+
+def parse_contents(contents):
+    content_type, content_string = contents.split(',')
+    decoded = base64.b64decode(content_string)
+    if 'csv' in content_type:
+        # Decode CSV
+        df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
+
+    elif 'xls' in content_type:
+        # Decode Excel
+        df = pd.read_excel(io.StringIO(decoded.decode('utf-8')))
+        # decoded = pd.read_excel(io.BytesIO(content_string))
+
+    return df
 
 ##### Chart Functions
 
@@ -99,8 +117,8 @@ def pie_chart(df:pd.DataFrame,
     fig = px.pie(df, 
                  names = x[0],
                  values = y[0],
-                 color_discrete_sequence=px.colors.sequential.Plasma_r,
-                 hole=0.4)
+                 color_discrete_sequence = px.colors.sequential.Plasma_r,
+                 hole = 0.4)
     return fig
 
 def bar_chart(df:pd.DataFrame,
@@ -109,7 +127,7 @@ def bar_chart(df:pd.DataFrame,
     fig = px.bar(df, 
                  x = x, 
                  y = y,
-                 color_discrete_sequence=px.colors.sequential.Plasma)
+                 color_discrete_sequence = px.colors.sequential.Plasma)
     return fig
 
 def line_chart(df:pd.DataFrame,
@@ -118,7 +136,7 @@ def line_chart(df:pd.DataFrame,
     fig = px.line(df, 
                   x = x, 
                   y = y,
-                  color_discrete_sequence=px.colors.sequential.Plasma)
+                  color_discrete_sequence = px.colors.sequential.Plasma)
     return fig
 
 def scatter_chart(df:pd.DataFrame,
@@ -127,7 +145,16 @@ def scatter_chart(df:pd.DataFrame,
     fig = px.scatter(df, 
                      x = x, 
                      y = y,
-                     color_discrete_sequence=px.colors.sequential.Plasma)
+                     color_discrete_sequence = px.colors.sequential.Plasma)
+    return fig
+
+def box_plot(df:pd.DataFrame,
+             x:list,
+             y:list):
+    fig = px.box(df, 
+                 x = x[0], 
+                 y = y,
+                 color_discrete_sequence = px.colors.sequential.Plasma)
     return fig
 
 def table_chart(df):
@@ -392,6 +419,25 @@ app.layout = dbc.Container(
              'border-radius': '15px', 
              **custom_css}
 )
+
+################################################################################################################
+################################################### CALLBACK ###################################################
+################################################################################################################
+
+# File Uploading
+@app.callback(Output('output-data-upload', 'children'),
+              [Input('upload-data', 'contents')])
+def update_output(contents):
+    global df
+    if contents is None:
+        raise PreventUpdate
+
+    df = parse_contents(contents)
+    print(df.head())
+
+    return html.Div([
+        html.H5('Upload Success')
+    ])
 
 # Callback to generate and update chart
 @app.callback(
