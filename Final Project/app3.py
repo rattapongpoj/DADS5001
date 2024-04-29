@@ -50,7 +50,7 @@ def query(payload, max_chars_per_request=1000):
 def format_instruction(instruction: str, df:pd.DataFrame):
     instruction_prompt = f"""
     My data contains columns: {', '.join(df.columns)}.
-    Please shortly suggest chart type and columns needed for the following question:
+    Please shortly suggest chart type and columns (based on column names provided) needed for the following question:
     
     """
     instruction_text = "[INST] " + instruction_prompt + instruction + " [/INST]"
@@ -446,15 +446,20 @@ def update_output(contents):
     State('text-input', 'value')
 )
 def update_dynamic_plot(n_clicks, input_text):
+    global df
     print(input_text)
     if n_clicks > 0:
         # Generate output
-        output = generate_output(input_text)
+        output = generate_output(input_text, df = df)
         print(f'Output: {output}')
+        print(df.columns)
         used_col = get_column_needed(df = df, generated_text = output)
         print(f'Columns: {used_col}')
         x, y = get_chart_axis(df = df, column = used_col)
+        print(f'X = {x}')
+        print(f'Y = {y}')
         chart_type = suggest_chart_type(df = df, generated_text = output)
+        print(f'Chart Type = {chart_type}')
 
         # Generate chart
         try:
