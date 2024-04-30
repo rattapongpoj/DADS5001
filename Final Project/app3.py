@@ -90,18 +90,29 @@ def get_axis_promt():
 
 def extract_dimension_metrics(generated_text:str):
     # pattern = r'"dimension"\s*:\s*\["(.*?)"\]'
-    dimension_pattern = r'"dimension"\s*:\s*(\[.*?\])'
-    metrics_pattern = r'"metrics"\s*:\s*(\[.*?\])'
+    dimension_pattern_1 = r'"dimension"\s*:\s*(\["([^xxx"]*)"])'
+    dimension_pattern_2 = r'"dimension"\s*:\s*(\[.*?\])'
+    metrics_pattern_1 = r'"metrics"\s*:\s*(\["([^yyy"]*)"])'
+    metrics_pattern_2 = r'"metrics"\s*:\s*(\[.*?\])'
 
-    dimension_match = re.search(dimension_pattern, generated_text)
-    metrics_match = re.search(metrics_pattern, generated_text)
-    if dimension_match:
-        x = dimension_match.group(1).replace('\\','')
+    dimension_match_1 = re.search(dimension_pattern_1, generated_text)
+    dimension_match_2 = re.search(dimension_pattern_2, generated_text)
+    metrics_match_1 = re.search(metrics_pattern_1, generated_text)
+    metrics_match_2 = re.search(metrics_pattern_2, generated_text)
+
+    if dimension_match_1:
+        x = dimension_match_1.group(1).replace('\\','')
+        x = json.loads(x)
+    elif dimension_match_2:
+        x = dimension_match_2.group(1).replace('\\','')
         x = json.loads(x)
     else:
         x = []
-    if metrics_match:
-        y = metrics_match.group(1).replace('\\','')
+    if metrics_match_1:
+        y = metrics_match_1.group(1).replace('\\','')
+        y = json.loads(y)
+    elif metrics_match_2:
+        y = metrics_match_2.group(1).replace('\\','')
         y = json.loads(y)
     else:
         y = []
@@ -508,7 +519,8 @@ def update_output(contents):
     print(df.head())
 
     return html.Div([
-        html.H5('Upload Success')
+        html.H6('Columns:'),
+        html.P(', '.join(df.columns))
     ])
 
 # Callback to generate and update chart
