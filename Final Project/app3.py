@@ -26,7 +26,7 @@ df = pd.read_csv(file)
 ################################################### FUNCTIONS ##################################################
 ################################################################################################################
 
-##### I/O Functions
+################################################# I/O Functions ################################################ 
 
 def query(payload, max_chars_per_request=1000):
     text = payload['inputs']
@@ -47,23 +47,6 @@ def query(payload, max_chars_per_request=1000):
     
     return ''.join(responses)
 
-def get_chart_prompt():
-    global df
-    chart_prompt = f"""
-    My data contains columns: {', '.join(df.columns)}.
-    Chart options: Bar, Scatter, Pie, Line, Box plot 
-    Please shortly suggest chart type and columns (based on column names provided) needed for the following question:
-    
-    """
-    return chart_prompt
-
-def get_axis_promt(column_needed:list):
-    axis_prompt = f"""
-    Return me this form {{"dimension": ["xxx"], "metrics": ["yyy"]}} from the column lists {', '.join(column_needed)}
-    
-    """
-    return axis_prompt
-
 def format_instruction(prompt:str,
                        instruction: str):
     instruction_prompt = prompt
@@ -82,11 +65,30 @@ def generate_output(instruction: str,
     output = format_output(output = data, instruction = instruction)
     return output
 
+################################################ Chart Handling ################################################
+
+def get_chart_prompt():
+    global df
+    chart_prompt = f"""
+    My data contains columns: {', '.join(df.columns)}.
+    Chart options: Bar, Scatter, Pie, Line, Box plot 
+    Please shortly suggest chart type and columns (based on column names provided) needed for the following question:
+    
+    """
+    return chart_prompt
+
 def get_column_needed(df:pd.DataFrame, generated_text:str):
     used_col = [col for col in df.columns if col in generated_text.replace('\\','')]
     return used_col
 
-def extract_dimension_metrics(generated_text):
+def get_axis_promt():
+    axis_prompt = f"""
+    Return me this form {{"dimension": ["xxx"], "metrics": ["yyy"]}} from the column lists:
+    """
+    # {', '.join(column_needed)}
+    return axis_prompt
+
+def extract_dimension_metrics(generated_text:str):
     # pattern = r'"dimension"\s*:\s*\["(.*?)"\]'
     dimension_pattern = r'"dimension"\s*:\s*(\[.*?\])'
     metrics_pattern = r'"metrics"\s*:\s*(\[.*?\])'
@@ -104,16 +106,32 @@ def extract_dimension_metrics(generated_text):
     
     return x, y
 
-def get_chart_axis(df:pd.DataFrame, column:list):
-    x = []
-    y = []
-    for col in column:
-        if str(df[col].dtype) in ['object', 'str', 'string']:
-            x.append(col)
-        elif col.lower() in ['date', 'year', 'month', 'week']:
-            x.append(col)
-        else:
-            y.append(col)
+def get_chart_axis(df:pd.DataFrame, column:list, x, y):
+    # x = []
+    # y = []
+
+    if x == [] and y ==[]:
+        for col in column:
+            if str(df[col].dtype) in ['object', 'str', 'string']:
+                x.append(col)
+            elif col.lower() in ['date', 'year', 'month', 'week']:
+                x.append(col)
+            else:
+                y.append(col)
+    elif x == [] and len(y) > 1:
+        for col in column:
+            if str(df[col].dtype) in ['object', 'str', 'string']:
+                x.append(col)
+                y.remove(col)
+            elif col.lower() in ['date', 'year', 'month', 'week']:
+                x.append(col)
+                y.remove(col)
+    elif y == [] and len(x) > 1:
+        for col in column:
+            if str(df[col].dtype) not in ['object', 'str', 'string'] and col.lower() in ['date', 'year', 'month', 'week']:
+                y.append(col)
+                x.remove(col)
+
     return x, y
 
 def suggest_chart_type(df:pd.DataFrame, generated_text:str):
@@ -127,7 +145,6 @@ def suggest_chart_type(df:pd.DataFrame, generated_text:str):
         return 'line'
     else:
         return 'bar'
-    
 
 def parse_contents(contents):
     content_type, content_string = contents.split(',')
@@ -143,7 +160,7 @@ def parse_contents(contents):
 
     return df
 
-##### Chart Functions
+################################################ Chart Functions ###############################################
 
 def pie_chart(df:pd.DataFrame,
               x:list,
@@ -490,7 +507,13 @@ def update_dynamic_plot(n_clicks, input_text):
         print(df.columns)
         used_col = get_column_needed(df = df, generated_text = output)
         print(f'Columns: {used_col}')
-        x, y = get_chart_axis(df = df, column = used_col)
+
+        dimension_metrics_text = generate_output(instruction = ', '.join(used_col), prompt = get_axis_promt())
+        dimension, metrics = extract_dimension_metrics(generated_text = dimension_metrics_text)
+        x, y = get_chart_axis(df = df,
+                              column = used_col,
+                              x = dimension,
+                              y = metrics)
         print(f'X = {x}')
         print(f'Y = {y}')
         chart_type = suggest_chart_type(df = df, generated_text = output)
