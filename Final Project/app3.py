@@ -209,8 +209,11 @@ def scatter_chart(df:pd.DataFrame,
     scatter_df = df.copy()
     scatter_df[y].fillna(0, inplace = True)
     scatter_df[x[0]].fillna('NA', inplace = True)
-    scatter_df[x[1]].fillna('NA', inplace = True)
-
+    try:
+        scatter_df[x[1]].fillna('NA', inplace = True)
+    except:
+        pass
+    
     if len(x) == 1:
         fig = px.scatter(scatter_df, 
                          x = x[0], 
