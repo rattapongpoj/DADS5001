@@ -47,12 +47,26 @@ def query(payload, max_chars_per_request=1000):
     
     return ''.join(responses)
 
-def format_instruction(instruction: str, df:pd.DataFrame):
-    instruction_prompt = f"""
+def get_chart_prompt():
+    global df
+    chart_prompt = f"""
     My data contains columns: {', '.join(df.columns)}.
+    Chart options: Bar, Scatter, Pie, Line, Box plot 
     Please shortly suggest chart type and columns (based on column names provided) needed for the following question:
     
     """
+    return chart_prompt
+
+def get_axis_promt(column_needed:list):
+    axis_prompt = f"""
+    Return me this form {{"dimension": ["xxx"], "metrics": ["yyy"]}} from the column lists {', '.join(column_needed)}
+    
+    """
+    return axis_prompt
+
+def format_instruction(prompt:str,
+                       instruction: str):
+    instruction_prompt = prompt
     instruction_text = "[INST] " + instruction_prompt + instruction + " [/INST]"
     return instruction_text
 
@@ -60,8 +74,9 @@ def format_output(output, instruction):
     output = output.replace(instruction, '').strip()
     return output
 
-def generate_output(instruction: str, df:pd.DataFrame = df):
-    instruction = format_instruction(instruction = instruction, df = df)
+def generate_output(instruction: str,
+                    prompt:str):
+    instruction = format_instruction(instruction = instruction, prompt = prompt)
     data = query({"inputs": instruction,
                   "parameters" : {"max_length": 10000}})
     output = format_output(output = data, instruction = instruction)
@@ -71,11 +86,31 @@ def get_column_needed(df:pd.DataFrame, generated_text:str):
     used_col = [col for col in df.columns if col in generated_text.replace('\\','')]
     return used_col
 
+def extract_dimension_metrics(generated_text):
+    # pattern = r'"dimension"\s*:\s*\["(.*?)"\]'
+    dimension_pattern = r'"dimension"\s*:\s*(\[.*?\])'
+    metrics_pattern = r'"metrics"\s*:\s*(\[.*?\])'
+
+    dimension_match = re.search(dimension_pattern, generated_text)
+    metrics_match = re.search(metrics_pattern, generated_text)
+    if dimension_match:
+        x = dimension_match.group(1)
+    else:
+        x = []
+    if metrics_match:
+        y = metrics_match.group(1)
+    else:
+        y = []
+    
+    return x, y
+
 def get_chart_axis(df:pd.DataFrame, column:list):
     x = []
     y = []
     for col in column:
         if str(df[col].dtype) in ['object', 'str', 'string']:
+            x.append(col)
+        elif col.lower() in ['date', 'year', 'month', 'week']:
             x.append(col)
         else:
             y.append(col)
@@ -124,9 +159,9 @@ def pie_chart(df:pd.DataFrame,
 def bar_chart(df:pd.DataFrame,
               x:list,
               y:list):
-    fig = px.bar(df, 
-                 x = x, 
-                 y = y,
+    fig = px.bar(df.groupby(x[0], as_index = False)[y].sum(), 
+                 x = x[0], 
+                 y = y[0],
                  color_discrete_sequence = px.colors.sequential.Plasma)
     return fig
 
@@ -162,10 +197,10 @@ def table_chart(df):
         data = [
             go.Table(
                 header = dict(values = list(df.columns),
-                              fill_color = 'paleturquoise',
+                              fill_color = 'lightblue',
                               align = 'left'),
                 cells = dict(values = [df[col] for col in df.columns],
-                             fill_color = 'lavender',
+                             fill_color = 'grey',
                              align = 'left')
             )
         ]
@@ -450,7 +485,7 @@ def update_dynamic_plot(n_clicks, input_text):
     print(input_text)
     if n_clicks > 0:
         # Generate output
-        output = generate_output(input_text, df = df)
+        output = generate_output(instruction = input_text, prompt = get_chart_prompt())
         print(f'Output: {output}')
         print(df.columns)
         used_col = get_column_needed(df = df, generated_text = output)
