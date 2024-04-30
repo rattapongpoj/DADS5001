@@ -78,7 +78,7 @@ def get_chart_prompt():
     return chart_prompt
 
 def get_column_needed(df:pd.DataFrame, generated_text:str):
-    used_col = [col for col in df.columns if col in generated_text.replace('\\','')]
+    used_col = [col for col in df.columns if col.lower() in generated_text.replace('\\','').lower()]
     return used_col
 
 def get_axis_promt():
@@ -96,11 +96,13 @@ def extract_dimension_metrics(generated_text:str):
     dimension_match = re.search(dimension_pattern, generated_text)
     metrics_match = re.search(metrics_pattern, generated_text)
     if dimension_match:
-        x = dimension_match.group(1)
+        x = dimension_match.group(1).replace('\\','')
+        x = json.loads(x)
     else:
         x = []
     if metrics_match:
-        y = metrics_match.group(1)
+        y = metrics_match.group(1).replace('\\','')
+        y = json.loads(y)
     else:
         y = []
     
@@ -135,9 +137,7 @@ def get_chart_axis(df:pd.DataFrame, column:list, x, y):
     return x, y
 
 def suggest_chart_type(df:pd.DataFrame, generated_text:str):
-    if len(df.columns) == 2:
-        return 'bar'
-    elif 'scatter' in generated_text.lower():
+    if 'scatter' in generated_text.lower():
         return 'scatter'
     elif 'pie' in generated_text.lower():
         return 'pie'
@@ -176,7 +176,8 @@ def pie_chart(df:pd.DataFrame,
 def bar_chart(df:pd.DataFrame,
               x:list,
               y:list):
-    fig = px.bar(df.groupby(x[0], as_index = False)[y].sum(), 
+    print(f'X: {x}, Y: {y}')
+    fig = px.bar(df, 
                  x = x[0], 
                  y = y[0],
                  color_discrete_sequence = px.colors.sequential.Plasma)
@@ -194,10 +195,28 @@ def line_chart(df:pd.DataFrame,
 def scatter_chart(df:pd.DataFrame,
                   x:list,
                   y:list):
-    fig = px.scatter(df, 
-                     x = x, 
-                     y = y,
-                     color_discrete_sequence = px.colors.sequential.Plasma)
+    scatter_df = df.copy()
+    scatter_df[y].fillna(0, inplace = True)
+    scatter_df[x[0]].fillna('NA', inplace = True)
+    scatter_df[x[1]].fillna('NA', inplace = True)
+
+    if len(x) == 1:
+        fig = px.scatter(scatter_df, 
+                         x = x[0], 
+                         y = y[0],
+                         color_discrete_sequence = px.colors.sequential.Plasma)
+    elif scatter_df[x[0]].nunique() > scatter_df[x[1]].nunique():
+        fig = px.scatter(scatter_df, 
+                         x = x[0], 
+                         y = y[0],
+                         color = x[1],
+                         color_discrete_sequence = px.colors.sequential.Plasma)
+    else:
+        fig = px.scatter(scatter_df, 
+                         x = x[1], 
+                         y = y[0],
+                         color = x[0],
+                         color_discrete_sequence = px.colors.sequential.Plasma)
     return fig
 
 def box_plot(df:pd.DataFrame,
@@ -224,7 +243,8 @@ def table_chart(df):
     )
     return fig
 
-def generate_chart(df, chart_type, x, y):
+def generate_chart(chart_type, x, y):
+    global df
     # filtered_data = df[df[chart_json['filter']['column']].isin(chart_json['filter']['value'])]
     filtered_data = df.copy()
 
@@ -238,7 +258,7 @@ def generate_chart(df, chart_type, x, y):
                          y = y)
     elif chart_type == 'bar':
         fig = bar_chart(df = filtered_data,
-                        x = x[0],
+                        x = x,
                         y = y)
     elif chart_type == 'scatter':
         fig = scatter_chart(df = filtered_data,
@@ -505,31 +525,36 @@ def update_dynamic_plot(n_clicks, input_text):
         output = generate_output(instruction = input_text, prompt = get_chart_prompt())
         print(f'Output: {output}')
         print(df.columns)
+
         used_col = get_column_needed(df = df, generated_text = output)
         print(f'Columns: {used_col}')
 
         dimension_metrics_text = generate_output(instruction = ', '.join(used_col), prompt = get_axis_promt())
+        print(f'Dimension Metrics Text: {dimension_metrics_text}')
+
         dimension, metrics = extract_dimension_metrics(generated_text = dimension_metrics_text)
+        print(f'Dimension Metrics: {dimension, metrics}')
+
         x, y = get_chart_axis(df = df,
                               column = used_col,
                               x = dimension,
                               y = metrics)
-        print(f'X = {x}')
-        print(f'Y = {y}')
+        print(f'X = {x} | Type: {type(x)}')
+        print(f'Y = {y} | Type: {type(y)}')
         chart_type = suggest_chart_type(df = df, generated_text = output)
         print(f'Chart Type = {chart_type}')
 
         # Generate chart
         try:
-            fig = generate_chart(df = df,
-                                 chart_type = chart_type,
+            fig = generate_chart(chart_type = chart_type,
                                  x = x,
                                  y = y)
+            print('Plot Success')
         except:
-            fig = generate_chart(df = df,
-                                 chart_type = 'table',
+            fig = generate_chart(chart_type = 'table',
                                  x = x,
                                  y = y)
+            print('Plot Failed')
 
         return fig
     else:
