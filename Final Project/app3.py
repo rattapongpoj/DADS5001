@@ -20,7 +20,7 @@ import io
 file = 'https://github.com/prattapong/DADS5001/blob/main/Final%20Project/association_file.csv?raw=True'
 API_URL = 'https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1'
 headers = {'Authorization': f'Bearer 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'}
-df = pd.read_csv(file)
+# df = pd.read_csv(file)
 
 ################################################################################################################
 ################################################### FUNCTIONS ##################################################
@@ -85,7 +85,6 @@ def get_axis_promt():
     axis_prompt = f"""
     Return me this form {{"dimension": ["xxx"], "metrics": ["yyy"]}} from the column lists:
     """
-    # {', '.join(column_needed)}
     return axis_prompt
 
 def extract_dimension_metrics(generated_text:str):
@@ -187,7 +186,8 @@ def pie_chart(df:pd.DataFrame,
 def bar_chart(df:pd.DataFrame,
               x:list,
               y:list):
-    print(f'X: {x}, Y: {y}')
+    bar_df = df.copy()
+    bar_df[x[0]] = bar_df[x[0]].astype('object')
     fig = px.bar(df, 
                  x = x[0], 
                  y = y[0],
@@ -245,9 +245,11 @@ def table_chart(df):
             go.Table(
                 header = dict(values = list(df.columns),
                               fill_color = 'lightblue',
+                              line_color = 'black',
                               align = 'left'),
                 cells = dict(values = [df[col] for col in df.columns],
-                             fill_color = 'grey',
+                             fill_color = 'white',
+                             line_color = 'black',
                              align = 'left')
             )
         ]
@@ -518,10 +520,14 @@ def update_output(contents):
     df = parse_contents(contents)
     print(df.head())
 
-    return html.Div([
-        html.H6('Columns:'),
-        html.P(', '.join(df.columns))
-    ])
+    return html.Div(
+        [
+            html.H6('Columns:'),
+            html.P(', '.join(df.columns)),
+        
+        ],
+        style = {'margin-top': '20px'}
+    )
 
 # Callback to generate and update chart
 @app.callback(
@@ -575,5 +581,5 @@ def update_dynamic_plot(n_clicks, input_text):
 
 # Run the app
 if __name__ == '__main__':
-    df = pd.read_csv(file)
+    # df = pd.read_csv(file)
     app.run_server(debug=True)
