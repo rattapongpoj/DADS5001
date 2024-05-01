@@ -572,10 +572,14 @@ def update_filter(selected_field):
 @app.callback(
     Output('dynamic-plot', 'figure'),
     Input('my-button', 'n_clicks'),
-    State('text-input', 'value')
+    [State('text-input', 'value'),
+     State('filter-1', 'value'),
+     State('filter-2', 'value')]
 )
-def update_dynamic_plot(n_clicks, input_text):
+def update_dynamic_plot(n_clicks, input_text, filter_column, filter_value):
     global df
+    print(filter_column)
+    print(filter_value)
     print(input_text)
     if n_clicks > 0:
         # Generate output
