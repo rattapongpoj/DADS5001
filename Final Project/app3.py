@@ -355,7 +355,7 @@ sidebar = html.Div(
                     html.Div(
                         [
                             html.P(
-                                'Filter 1', 
+                                'Filter Field', 
                                 style = {'margin-top': '8px', 
                                          'margin-bottom': '4px',
                                          **custom_css}, 
@@ -380,7 +380,7 @@ sidebar = html.Div(
                     html.Div(
                         [
                             html.P(
-                                'Filter 2', 
+                                'Filter Value', 
                                 style = {'margin-top': '16px', 'margin-bottom': '4px'}, 
                                 className = 'font-weight-bold'
                             ),
@@ -390,17 +390,17 @@ sidebar = html.Div(
                                 options = [{'label': x, 'value': x} for x in ['option1','option2']],
                                 style = {'width': '100%'}
                             ),
-                            html.Button(
-                                id = 'my-button', 
-                                n_clicks = 0, 
-                                children = 'Apply',
-                                style = {'width': '100%',
-                                         'height': '5vh',
-                                         'margin-top': '25px',
-                                         'margin-bottom': '6px',
-                                         'border': '1px',
-                                         'border-radius': '8px'},
-                                className = 'bg-primary text-white font-italic'),
+                            # html.Button(
+                            #     id = 'my-button', 
+                            #     n_clicks = 0, 
+                            #     children = 'Apply',
+                                #     style = {'width': '100%',
+                                #              'height': '5vh',
+                                #              'margin-top': '25px',
+                                #              'margin-bottom': '6px',
+                                #              'border': '1px',
+                                #              'border-radius': '8px'},
+                            #     className = 'bg-primary text-white font-italic'),
                             html.Hr()
                         ]
                     )
@@ -471,8 +471,19 @@ content = html.Div(
                         placeholder = 'Enter text here...',
                         style = {'border-radius': '10px lightgrey', 
                                  'margin-left': '15px',
-                                 'width': '95%',
+                                 'width': '80%',
                                  **custom_css}
+                    ),
+                    html.Button(
+                        'Send', 
+                        id='my-button', 
+                        n_clicks=0,
+                        style = {
+                            'border-radius': '8px',
+                            'margin-left': '3px',
+                            'width': '100px'
+                        },
+                        className = 'bg-primary text-white font-italic'
                     )
                 ]
             )
