@@ -560,8 +560,10 @@ def update_filter(selected_field):
     if selected_field is None:
         return []
     else:
-        filter_value = df[selected_field].unique()
+        filter_value = df[selected_field].dropna().unique()
+        print(filter_value)
         options = [{'label': x, 'value': x} for x in filter_value]
+        print(options)
         return options
 
 
