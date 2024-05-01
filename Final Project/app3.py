@@ -523,7 +523,8 @@ app.layout = dbc.Container(
 ################################################### CALLBACK ###################################################
 ################################################################################################################
 
-# File Uploading
+################################################ File Uploading ################################################
+
 @app.callback(
         [Output('output-data-upload', 'children'),
          Output('filter-1', 'options')],
@@ -532,7 +533,7 @@ def update_output(contents):
     global df
     if contents is None:
         raise PreventUpdate
-
+    
     df = parse_contents(contents)
     print(df.head())
 
@@ -548,7 +549,24 @@ def update_output(contents):
         style = {'margin-top': '20px'}
     ), options
 
-# Callback to generate and update chart
+
+################################################# Select Filter ################################################
+
+@app.callback(
+         Output('filter-2', 'options'),
+        [Input('filter-1', 'value')])
+def update_filter(selected_field):
+    global df
+    if selected_field is None:
+        return []
+    else:
+        filter_value = df[selected_field].unique()
+        options = [{'label': x, 'value': x} for x in filter_value]
+        return options
+
+
+################################################# Update Chart #################################################
+
 @app.callback(
     Output('dynamic-plot', 'figure'),
     Input('my-button', 'n_clicks'),
@@ -598,7 +616,9 @@ def update_dynamic_plot(n_clicks, input_text):
         # Return an empty figure
         return go.Figure()
 
-# Run the app
+################################################################################################################
+##################################################### MAIN #####################################################
+################################################################################################################
+
 if __name__ == '__main__':
-    # df = pd.read_csv(file)
     app.run_server(debug=True)
