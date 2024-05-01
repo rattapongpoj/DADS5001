@@ -363,8 +363,8 @@ sidebar = html.Div(
                             ),
                             dcc.Dropdown(
                                 id = 'filter-1',
-                                multi = True,
-                                options = [{'label': x, 'value': x} for x in ['option1','option2']],
+                                multi = False,
+                                # options = [{'label': x, 'value': x} for x in ['option1','option2']],
                                 style = {'width': '100%'}
                             )
                         ]
@@ -387,7 +387,7 @@ sidebar = html.Div(
                             dcc.Dropdown(
                                 id = 'filter-2',
                                 multi = True,
-                                options = [{'label': x, 'value': x} for x in ['option1','option2']],
+                                # options = [{'label': x, 'value': x} for x in ['option1','option2']],
                                 style = {'width': '100%'}
                             ),
                             # html.Button(
@@ -471,7 +471,7 @@ content = html.Div(
                         placeholder = 'Enter text here...',
                         style = {'border-radius': '10px lightgrey', 
                                  'margin-left': '15px',
-                                 'width': '80%',
+                                 'width': '85%',
                                  **custom_css}
                     ),
                     html.Button(
@@ -481,7 +481,7 @@ content = html.Div(
                         style = {
                             'border-radius': '8px',
                             'margin-left': '3px',
-                            'width': '100px'
+                            'width': '80px'
                         },
                         className = 'bg-primary text-white font-italic'
                     )
@@ -524,8 +524,10 @@ app.layout = dbc.Container(
 ################################################################################################################
 
 # File Uploading
-@app.callback(Output('output-data-upload', 'children'),
-              [Input('upload-data', 'contents')])
+@app.callback(
+        [Output('output-data-upload', 'children'),
+         Output('filter-1', 'options')],
+        [Input('upload-data', 'contents')])
 def update_output(contents):
     global df
     if contents is None:
@@ -534,6 +536,9 @@ def update_output(contents):
     df = parse_contents(contents)
     print(df.head())
 
+    dimension_col = [col for col in df.columns if str(df[col].dtype) in ('object', 'str', 'string')]
+    options = [{'label': x, 'value': x} for x in dimension_col]
+
     return html.Div(
         [
             html.H6('Columns:'),
@@ -541,7 +546,7 @@ def update_output(contents):
         
         ],
         style = {'margin-top': '20px'}
-    )
+    ), options
 
 # Callback to generate and update chart
 @app.callback(
